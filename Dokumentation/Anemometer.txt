@@ -1,0 +1,34 @@
+Anemometer WS2300-15
+====================
+
+Das Anemometer verfügt über einen 4-poligen Anschluss:
+
+    Pin  | Farbe     | Name          | Funktion
+    ------------------------------------------------------------------------
+      1  | braun     | SERIAL O/P    | Serieller Datenausgang
+      2  | rot       | VDD           | Versorgungsspannung
+      3  | grün      | REGULATOR CE  | Enable-Leitung für Onboard Regulator
+      4  | gelb      | GND           | Masse
+
+
+Pin 2 (rot) und Pin 4 (gelb) dienen der Stromversorgung des Anemometers.
+Mit Pin 3 (grün) kann der interne Spannungsregler ein- und ausgeschaltet
+werden (aktiv LOW).
+
+Über Pin 1 (braun) erfolgt eine asynchrone Übertragung der Messwerte mittels
+einer Übertragungsrate von 800bps. Die Sensorwerte werden periodisch in einem
+Intervall von ca. 2 Sekunden.
+
+Die Nachrichten umfassen 26 Bit. Eine logische 1 ist durch einen LOW-Pegel und
+eine logische 0 durch einen HIGH-Pegel kodiert.
+
+Aufgebaut sind die Nachrichten wie folgt:
+
+     5 Bit   Start-Marker = 00100
+
+     4 Bit   Windrichtung
+
+    12 Bit   Windgeschwindigkeit
+
+     4 Bit   CRC-Prüfsumme
+
