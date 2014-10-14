@@ -11,11 +11,11 @@ union anemometer_reading
 
       struct
       {
-          uint8_t  start_marker   :  5;
-          uint8_t  wind_direction :  4;
-          uint16_t wind_speed     : 12;
-          uint8_t  crc            :  4;
-          uint8_t  padding        :  6;
+          unsigned int start_marker   :  5;
+          unsigned int wind_direction :  4;
+          unsigned int wind_speed     : 12;
+          unsigned int crc            :  4;
+          unsigned int padding        :  7;
       } fields;
 };
 
