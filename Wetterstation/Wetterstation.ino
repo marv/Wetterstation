@@ -1,4 +1,4 @@
-#include <Anemometer.h>
+#include "Anemometer.h"
 
 Anemometer anemo(2, 3);
 
