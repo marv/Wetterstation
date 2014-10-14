@@ -21,7 +21,7 @@ void loop() {
   Serial.println(anemo.windDirectionToString(ar.fields.wind_direction));
   
   Serial.print("Wind speed: ");
-  Serial.println(ar.fields.wind_speed));
+  Serial.println(ar.fields.wind_speed);
   
   delay(10);
 }
