@@ -44,21 +44,31 @@ void setup() {
     Serial.println(timeString);
 }
 
-void loop() {
-    Serial.println("Reading anemometer measurement");
-
+void
+gather_anemometer_data()
+{
     anemometer_reading ar;
     ar = anemo.getMeasurement();
 
+    /*
+    // TODO: verify CRC
     Serial.print("CRC: ");
     Serial.println(anemo.isValid(ar));
     Serial.println();
+    */
 
-    Serial.print("Wind direction: ");
+    Serial.print("  Wind direction: ");
     Serial.println(anemo.windDirectionToString(ar.fields.wind_direction));
 
-    Serial.print("Wind speed: ");
+    Serial.print("  Wind speed: ");
     Serial.println(ar.fields.wind_speed);
+}
+
+void loop() {
+    Serial.println("Acquiring data from all sensors...");
+
+    Serial.println(" * Anemometer:");
+    gather_anemometer_data();
 
     delay(10);
 }
