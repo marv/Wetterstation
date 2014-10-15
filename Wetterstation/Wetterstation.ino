@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include <RTClib.h>
 #include <Adafruit_BMP085.h>
+#include <HMC6352.h>
 
 #include "Pinning.h"
 #include "Anemometer.h"
@@ -55,6 +56,26 @@ void setup() {
 }
 
 void
+gather_anemometer_data()
+{
+    anemometer_reading ar;
+    ar = anemo.getMeasurement();
+
+    /*
+    // TODO: verify CRC
+    Serial.print("CRC: ");
+    Serial.println(anemo.isValid(ar));
+    Serial.println();
+    */
+
+    Serial.print("  Wind direction: ");
+    Serial.println(anemo.windDirectionToString(ar.fields.wind_direction));
+
+    Serial.print("  Wind speed: ");
+    Serial.println(ar.fields.wind_speed);
+}
+
+void
 gather_bmp085_data()
 {
     Serial.print("  Temperature = ");
@@ -85,23 +106,13 @@ gather_bmp085_data()
 }
 
 void
-gather_anemometer_data()
+gather_compass_data()
 {
-    anemometer_reading ar;
-    ar = anemo.getMeasurement();
-
-    /*
-    // TODO: verify CRC
-    Serial.print("CRC: ");
-    Serial.println(anemo.isValid(ar));
-    Serial.println();
-    */
-
-    Serial.print("  Wind direction: ");
-    Serial.println(anemo.windDirectionToString(ar.fields.wind_direction));
-
-    Serial.print("  Wind speed: ");
-    Serial.println(ar.fields.wind_speed);
+    HMC6352.Wake();
+    int heading = HMC6352.GetHeading();
+    Serial.print("  Heading: ");
+    Serial.println(heading);
+    HMC6352.Sleep();
 }
 
 void loop() {
@@ -112,6 +123,9 @@ void loop() {
 
     Serial.println(" * BMP085:");
     gather_bmp085_data();
+
+    Serial.println("* HMC6352 compass");
+    gather_compass_data();
 
     delay(10);
 }
