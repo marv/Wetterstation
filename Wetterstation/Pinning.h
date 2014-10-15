@@ -1,3 +1,6 @@
+#ifndef WETTERSTATION_GUARD_PINNING_H
+#define WETTERSTATION_GUARD_PINNING_H 1
+
 /*Headerfile für Pinnings
 
 Stand:25.09.2014
@@ -31,3 +34,5 @@ Historie:
 #define PINSPI_DI_SDCARD	74			//DI SD-Kartenleser
 #define PINSPI_DO_SDCARD	75			//DO SD-Kartenleser
 #define PINSPI_CLK_SDCARD	76			//CLK SD-Kartenleser
+
+#endif
