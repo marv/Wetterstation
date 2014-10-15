@@ -13,10 +13,10 @@
 #define PIND_MOTOR_L            2           // Motorsteuerung L293 links
 #define PIND_MOTOR_R            3           // Motorsteuerung L293 rechts
 
-#define PIND_LED                13          // Orange LED "L"
+#define PIN_ANEMOMETER_DATA     4           // Anemometer Serial Data
+#define PIN_ANEMOMETER_ENABLE   5           // Anemometer Regulator Enable
 
-#define PINTX_ANEMOMETER        14          // Anemometer UART TX
-#define PINRX_ANEMOMETER        15          // Anemometer UART RX
+#define PIND_LED                13          // Orange LED "L"
 
 #define PINTX_GPS               16          // GPS UART TX
 #define PINRX_GPS               17          // GPS UART RX
