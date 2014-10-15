@@ -1,8 +1,9 @@
 /* vim: set sw=4 sts=4 et ft=cpp foldmethod=syntax : */
 
+#include "Pinning.h"
 #include "Anemometer.h"
 
-Anemometer anemo(2, 3);
+Anemometer anemo(PIN_ANEMOMETER_DATA, PIN_ANEMOMETER_ENABLE);
 
 void setup() {
     Serial.begin(9600);
