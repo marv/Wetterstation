@@ -6,13 +6,13 @@
 #include <SD.h>
 #include <RTClib.h>
 #include <Adafruit_BMP085.h>
-#include <HMC6352.h>
 #include <SHT1x.h>
 #include <Adafruit_GPS.h>
 
 #include "Pinning.h"
 #include "Anemometer.h"
 #include "NTC.h"
+#include "HMC6352.h"
 #include "DataLogger.h"
 
 Anemometer anemo(PIN_ANEMOMETER_DATA, PIN_ANEMOMETER_ENABLE);
