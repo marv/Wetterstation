@@ -8,6 +8,7 @@
 #include <Adafruit_BMP085.h>
 #include <HMC6352.h>
 #include <SHT1x.h>
+#include <Adafruit_GPS.h>
 
 #include "Pinning.h"
 #include "Anemometer.h"
