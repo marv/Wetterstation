@@ -26,9 +26,9 @@ void init_GPS(){
   GPS.begin(BAUD_GPS);
   GPS_SERIAL.begin(BAUD_GPS);  
   // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
-  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
   // uncomment this line to turn on only the "minimum recommended" data
-  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
+  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
   // For parsing data, we don't suggest using anything but either RMC only or RMC+GGA since
   // the parser doesn't care about other sentences at this time  
   // Set the update rate
@@ -37,10 +37,12 @@ void init_GPS(){
 }
 
 /*
-Return the actual position using the GPS-Module
+Gibt die aktuelle Position als Längen- und Breitengrad, die Höhe über dem Meeresspiegel und ob eine Satellitenverbindung besteht zurück.
 Parameters:
-ReturnValue: struct gps_data, which contains the longitude, latitude and if the module has a fix to enough satelittes. 
-
+ReturnValue: gps_data.longitude;   //Längengrad
+	gps_data.latitude;         //Breitengrad
+        gps_data.altitude;         //Höhe über mittlerem Meeresspiegel
+	gps_data.fix;              // Satellitenverbindung vorhanden
 */
 struct gps_data get_position_GPS(){
  
@@ -74,7 +76,7 @@ wenn kein fix vorhanden ist und die vorgebene Zyklenzahl überschritten wird.*/
             GPS.parse(nmeaSentence);  
             /* Es muss sichergestellt werden, dass der Empfangene NMEA Satz, ein Satz ist der Positionsdaten
             enthält. Weiterhin muss abgefragt werden, ob die Positionsdaten gültig sind.(fix vorhanden)*/
-            if(strstr(nmeaSentence,"GPRMC") != NULL && (short)GPS.fix == 1){
+            if(strstr(nmeaSentence,"GPGGA") != NULL && (short)GPS.fix == 1){
             data_received=1;
           }
              #if DEBUG_GPS
@@ -85,11 +87,13 @@ wenn kein fix vorhanden ist und die vorgebene Zyklenzahl überschritten wird.*/
           output.longitude = GPS.longitude;
           output.latitude = GPS.latitude;
           output.fix = (short)GPS.fix;
+          output.altitude = GPS.altitude;
        }
       else{
              output.longitude = 0.0f;
             output.latitude = 0.0f;
              output.fix = 0;
+             output.altitude = 0.0f;
        }
  }
 #if DEBUG_GPS

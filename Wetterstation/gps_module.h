@@ -10,9 +10,10 @@
 #define GPS_MODULE_H
 
 struct gps_data{
-  	float longitude;
-	float latitude;
-	short fix;
+  	float longitude;  //Längengrad
+	float latitude;   //Breitengrad
+        float altitude;   //Höhe über mittlerem Meeresspiegel
+	short fix;        //Verbindung zum Satellit
   };
 /**********************************************************************************
 * Prototypes
