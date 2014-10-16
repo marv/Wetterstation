@@ -5,11 +5,13 @@
 #include <RTClib.h>
 #include <Adafruit_BMP085.h>
 #include <HMC6352.h>
+#include <SHT1x.h>
 
 #include "Pinning.h"
 #include "Anemometer.h"
 
 Anemometer anemo(PIN_ANEMOMETER_DATA, PIN_ANEMOMETER_ENABLE);
+SHT1x sht1x(PIND_LUFTF_DATA, PIND_LUFTF_CLK);
 
 RTC_DS1307 rtc;
 Adafruit_BMP085 bmp;
@@ -115,6 +117,24 @@ gather_compass_data()
     HMC6352.Sleep();
 }
 
+void
+gather_sht1x_data()
+{
+    float temp_c;
+    float humidity;
+
+    // Read values from the sensor
+    temp_c = sht1x.readTemperatureC();
+    humidity = sht1x.readHumidity();
+
+    // Print the values to the serial port
+    Serial.print("  Temperature: ");
+    Serial.print(temp_c, DEC);
+    Serial.print(" *C, ");
+    Serial.print(humidity);
+    Serial.println("%");
+}
+
 void loop() {
     Serial.println("Acquiring data from all sensors...");
 
@@ -126,6 +146,9 @@ void loop() {
 
     Serial.println("* HMC6352 compass");
     gather_compass_data();
+
+    Serial.println(" * SHT1x:");
+    gather_sht1x_data();
 
     delay(10);
 }
