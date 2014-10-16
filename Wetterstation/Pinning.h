@@ -39,7 +39,7 @@
 
 #define PIND_EN_AKKUMESS        53          // ENABLE Akkuspannungs-Messung
 
-#define PINA_TEMP               54          // Analoge Temperaturspannung
+#define PINA_TEMP               0          // Analoge Temperaturspannung
 
 #define PINSPI_DI_SDCARD        74          // DI SD-Kartenleser
 #define PINSPI_DO_SDCARD        75          // DO SD-Kartenleser
