@@ -11,12 +11,15 @@
 
 #include "Pinning.h"
 #include "Anemometer.h"
+#include "DataLogger.h"
 
 Anemometer anemo(PIN_ANEMOMETER_DATA, PIN_ANEMOMETER_ENABLE);
 SHT1x sht1x(PIND_LUFTF_DATA, PIND_LUFTF_CLK);
 
 RTC_DS1307 rtc;
 Adafruit_BMP085 bmp;
+
+DataLogger logger(&rtc);
 
 // On the Ethernet Shield, CS is pin 4. Note that even if it's not
 // used as the CS pin, the hardware CS pin (10 on most Arduino boards,
@@ -174,6 +177,12 @@ void loop() {
 
     Serial.println(" * SHT1x:");
     gather_sht1x_data();
+
+    DataLogEntry log_entry;
+    log_entry.pressure = 102315;
+    log_entry.temperature = 20.25f;
+
+    logger.add_entry(log_entry);
 
     delay(10);
 }
