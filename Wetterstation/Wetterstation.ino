@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
 #include <RTClib.h>
 #include <Adafruit_BMP085.h>
 #include <HMC6352.h>
@@ -15,6 +17,12 @@ SHT1x sht1x(PIND_LUFTF_DATA, PIND_LUFTF_CLK);
 
 RTC_DS1307 rtc;
 Adafruit_BMP085 bmp;
+
+// On the Ethernet Shield, CS is pin 4. Note that even if it's not
+// used as the CS pin, the hardware CS pin (10 on most Arduino boards,
+// 53 on the Mega) must be left as an output or the SD library
+// functions will not work.
+const int chipSelect = 4;
 
 void setup() {
     Serial.begin(9600);
@@ -47,6 +55,23 @@ void setup() {
     sprintf(timeString, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
     Serial.print("DS1307 RTC time: ");
     Serial.println(timeString);
+
+
+    /** SD card **/
+    Serial.print("Initializing SD card...");
+    // make sure that the default chip select pin is set to
+    // output, even if you don't use it:
+    pinMode(10, OUTPUT);
+
+    // see if the card is present and can be initialized:
+    if (! SD.begin(chipSelect))
+    {
+        Serial.println("Card failed, or not present");
+        // don't do anything more:
+        return;
+    }
+
+    Serial.println("card initialized.");
 
 
     /** BMP085 **/
