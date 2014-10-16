@@ -10,9 +10,16 @@ class DataLogEntry
 
     public:
 
-        int32_t pressure;
+        int32_t  bmp085_pressure;
+        float    bmp085_temperature;
 
-        float temperature;
+        float    sht15_temperature;
+        float    sht15_humidity;
+
+        uint8_t  wind_direction;
+        uint16_t wind_speed;
+
+        uint16_t compass_heading;
 
 };
 

@@ -86,101 +86,48 @@ void setup() {
 }
 
 void
-gather_anemometer_data()
+gather_anemometer_data(uint8_t * wind_direction, uint16_t * wind_speed)
 {
     anemometer_reading ar;
     ar = anemo.getMeasurement();
 
-    /*
     // TODO: verify CRC
-    Serial.print("CRC: ");
-    Serial.println(anemo.isValid(ar));
-    Serial.println();
-    */
 
-    Serial.print("  Wind direction: ");
-    Serial.println(anemo.windDirectionToString(ar.fields.wind_direction));
-
-    Serial.print("  Wind speed: ");
-    Serial.println(ar.fields.wind_speed);
+    *wind_direction = ar.fields.wind_direction;
+    *wind_speed = ar.fields.wind_speed;
 }
 
 void
-gather_bmp085_data()
+gather_bmp085_data(float * temperature, int32_t * pressure)
 {
-    Serial.print("  Temperature = ");
-    Serial.print(bmp.readTemperature());
-    Serial.println(" *C");
-
-    Serial.print("  Pressure = ");
-    Serial.print(bmp.readPressure());
-    Serial.println(" Pa");
-
-    // Calculate altitude assuming 'standard' barometric
-    // pressure of 1013.25 millibar = 101325 Pascal
-    Serial.print("  Altitude = ");
-    Serial.print(bmp.readAltitude());
-    Serial.println(" meters");
-
-    Serial.print("  Pressure at sealevel (calculated) = ");
-    Serial.print(bmp.readSealevelPressure());
-    Serial.println(" Pa");
-
-    // you can get a more precise measurement of altitude
-    // if you know the current sea level pressure which will
-    // vary with weather and such. If it is 1015 millibars
-    // that is equal to 101500 Pascals.
-    Serial.print("  Real altitude = ");
-    Serial.print(bmp.readAltitude(101500));
-    Serial.println(" meters");
+    *temperature = bmp.readTemperature();
+    *pressure = bmp.readPressure();
 }
 
 void
-gather_compass_data()
+gather_compass_data(uint16_t * heading)
 {
     HMC6352.Wake();
-    int heading = HMC6352.GetHeading();
-    Serial.print("  Heading: ");
-    Serial.println(heading);
+    *heading = HMC6352.GetHeading();
     HMC6352.Sleep();
 }
 
 void
-gather_sht1x_data()
+gather_sht1x_data(float * temperature, float * humidity)
 {
-    float temp_c;
-    float humidity;
-
-    // Read values from the sensor
-    temp_c = sht1x.readTemperatureC();
-    humidity = sht1x.readHumidity();
-
-    // Print the values to the serial port
-    Serial.print("  Temperature: ");
-    Serial.print(temp_c, DEC);
-    Serial.print(" *C, ");
-    Serial.print(humidity);
-    Serial.println("%");
+    *temperature = sht1x.readTemperatureC();
+    *humidity = sht1x.readHumidity();
 }
 
-void loop() {
-    Serial.println("Acquiring data from all sensors...");
-
-    Serial.println(" * Anemometer:");
-    gather_anemometer_data();
-
-    Serial.println(" * BMP085:");
-    gather_bmp085_data();
-
-    Serial.println("* HMC6352 compass");
-    gather_compass_data();
-
-    Serial.println(" * SHT1x:");
-    gather_sht1x_data();
-
+void loop()
+{
     DataLogEntry log_entry;
-    log_entry.pressure = 102315;
-    log_entry.temperature = 20.25f;
+
+    Serial.println("Acquiring data from all sensors...");
+    gather_anemometer_data(&log_entry.wind_direction, &log_entry.wind_speed);
+    gather_bmp085_data(&log_entry.bmp085_temperature, &log_entry.bmp085_pressure);
+    gather_compass_data(&log_entry.compass_heading);
+    gather_sht1x_data(&log_entry.sht15_temperature, &log_entry.sht15_humidity);
 
     logger.add_entry(log_entry);
 
