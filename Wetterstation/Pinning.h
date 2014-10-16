@@ -27,8 +27,8 @@
 #define PINSDA_I2C              20          // RTC, Druck, Kompass I2C SDA
 #define PINSCL_I2C              21          // RTC, Druck, Kompass I2C SCL
 
-#define PIND_LUFTF_DATA         47          // Luftfeuchte-Sensor Daten
-#define PIND_LUFTF_CLK          48          // Luftfeuchte-Sensor Clock
+#define PIND_LUFTF_DATA         10          // Luftfeuchte-Sensor Daten
+#define PIND_LUFTF_CLK          11          // Luftfeuchte-Sensor Clock
 
 #define PIND_ENDLAGE1           49          // Motor-Endlagentaster 1
 #define PIND_ENDLAGE2           50          // Motor-Endlagentaster 2 (nicht verwendet)
