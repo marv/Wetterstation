@@ -68,11 +68,13 @@ DataLogger::add_entry(const DataLogEntry & entry)
         char bmp085_temperatureString[5];
         char sht15_temperatureString[5];
         char sht15_humidityString[5];
+        char ntc_temperatureString[5];
         dtostrf(entry.bmp085_temperature, 5, 2, bmp085_temperatureString);
         dtostrf(entry.sht15_temperature, 5, 2, sht15_temperatureString);
         dtostrf(entry.sht15_humidity, 5, 2, sht15_humidityString);
+        dtostrf(entry.ntc_temperature, 5, 2, ntc_temperatureString);
 
-        sprintf(log_line, "%s,%d,%d,%d,%d,%s,%s,%s\n",
+        sprintf(log_line, "%s,%d,%d,%d,%d,%s,%s,%s,%s\n",
                 timeString,
                 entry.compass_heading,
                 entry.wind_direction,
@@ -80,7 +82,8 @@ DataLogger::add_entry(const DataLogEntry & entry)
                 entry.bmp085_pressure,
                 bmp085_temperatureString,
                 sht15_temperatureString,
-                sht15_humidityString);
+                sht15_humidityString,
+                ntc_temperatureString);
 
         dataFile.println(log_line);
         dataFile.close();

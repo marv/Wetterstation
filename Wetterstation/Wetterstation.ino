@@ -11,10 +11,12 @@
 
 #include "Pinning.h"
 #include "Anemometer.h"
+#include "NTC.h"
 #include "DataLogger.h"
 
 Anemometer anemo(PIN_ANEMOMETER_DATA, PIN_ANEMOMETER_ENABLE);
 SHT1x sht1x(PIND_LUFTF_DATA, PIND_LUFTF_CLK);
+NTC ntc(PINA_TEMP);
 
 RTC_DS1307 rtc;
 Adafruit_BMP085 bmp;
@@ -128,6 +130,7 @@ void loop()
     gather_bmp085_data(&log_entry.bmp085_temperature, &log_entry.bmp085_pressure);
     gather_compass_data(&log_entry.compass_heading);
     gather_sht1x_data(&log_entry.sht15_temperature, &log_entry.sht15_humidity);
+    log_entry.ntc_temperature = ntc.readTemperature();
 
     logger.add_entry(log_entry);
 

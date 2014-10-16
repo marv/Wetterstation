@@ -21,6 +21,8 @@ class DataLogEntry
 
         uint16_t compass_heading;
 
+        float    ntc_temperature;
+
 };
 
 class DataLogger
