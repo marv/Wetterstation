@@ -24,37 +24,15 @@ DataLogger::add_entry(const DataLogEntry & entry)
     Serial.println("Querying RTC to get date");
     DateTime now = _rtc->now();
 
-    /*
-    sprintf(dateString, "%02d-%02d-%04d", now.day(), now.month(), now.year());
+    sprintf(dateString, "%04d%02d%02d", now.year(), now.month(), now.day());
     Serial.print("DS1307 RTC date: ");
     Serial.println(dateString);
 
-    String filename = String(dateString);
-    filename += ".csv";
-    Serial.println(filename);
-
-    char fileNameCharArray[filename.length()+1];
-    filename.toCharArray(fileNameCharArray, filename.length()+1);
-
-    Serial.print("FILENAME: ");
-    Serial.println(fileNameCharArray);
-
-
-    File dataFile = SD.open(fileNameCharArray, FILE_WRITE);
-    //File dataFile = SD.open(filename, FILE_WRITE);
-    /*
     char filename[15];
-    sprintf(filename, "%s.log", dateString);
+    sprintf(filename, "%s.csv", dateString);
     filename[14] = '\0';
 
     File dataFile = SD.open(filename, FILE_WRITE);
-    */
-
-    /**
-     * TODO: for some reason opening a file with a dynamic name
-     * doesn't work
-     **/
-    File dataFile = SD.open("data_log.csv", FILE_WRITE);
 
     if (dataFile)
     {
