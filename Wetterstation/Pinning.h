@@ -4,7 +4,7 @@
 #define WETTERSTATION_GUARD_PINNING_H 1
 
 /**
- * Headerfile für Pinnings
+ * Headerfile fÃ¼r Pinnings
  **/
 
 //--------------------------------------------------------------------
