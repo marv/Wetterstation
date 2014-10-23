@@ -16,6 +16,10 @@
 #include "DataLogger.h"
 #include "gps_module.h"
 
+#include "SunPositionEstimator.h"
+#include "MotorDriver.h"
+#include "SolarPanelPositioner.h"
+
 Anemometer anemo(PIN_ANEMOMETER_DATA, PIN_ANEMOMETER_ENABLE);
 SHT1x sht1x(PIND_LUFTF_DATA, PIND_LUFTF_CLK);
 NTC ntc(PINA_TEMP);
@@ -24,6 +28,9 @@ RTC_DS1307 rtc;
 Adafruit_BMP085 bmp;
 
 DataLogger logger(&rtc);
+
+MotorDriver motor_driver(PIND_MOTOR_L, PIND_MOTOR_R);
+SolarPanelPositioner positioner(&motor_driver);
 
 // On the Ethernet Shield, CS is pin 4. Note that even if it's not
 // used as the CS pin, the hardware CS pin (10 on most Arduino boards,
@@ -91,6 +98,9 @@ void setup() {
         Serial.println("Could not find a valid BMP085 sensor, check wiring!");
         while (1) {}
     }
+
+    /** SolarPanelPositioner **/
+    positioner.calibrateCompass();
 }
 
 void
@@ -131,6 +141,13 @@ void loop()
 {
     DataLogEntry log_entry;
 
+    /* get the current time from the RTC */
+    DateTime now = rtc.now();
+
+    /* get position from GPS */
+    struct gps_data gps = get_position_GPS();
+
+
     Serial.println("Acquiring data from all sensors...");
     gather_anemometer_data(&log_entry.wind_direction, &log_entry.wind_speed);
     gather_bmp085_data(&log_entry.bmp085_temperature, &log_entry.bmp085_pressure);
@@ -139,6 +156,12 @@ void loop()
     log_entry.ntc_temperature = ntc.readTemperature();
 
     logger.add_entry(log_entry);
+
+
+    /** solar panel positioning **/
+    uint16_t sun_position = SunPositionEstimator::get_estimate(now, &gps);
+    positioner.set_orientation(sun_position);
+
 
     delay(20000);
 }
