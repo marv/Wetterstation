@@ -38,6 +38,7 @@ SolarPanelPositioner positioner(&motor_driver);
 // functions will not work.
 const int chipSelect = 4;
 
+
 void setup() {
     Serial.begin(9600);
     Serial.println("Starting up...");
@@ -137,6 +138,25 @@ gather_sht1x_data(float * temperature, float * humidity)
     *humidity = sht1x.readHumidity();
 }
 
+/**
+ * Due to our setup (the anemometer rotates with the platform) the reading of
+ * the wind direction is biased
+ * This function subtracts the offset of 90 degrees
+ *
+ * wrong direction | corrected
+ * ----------------------------------------
+ * 0000  (N)       | 1010 (W)
+ * 0001  (NNE)     | 1011 (WNW)
+ *    ,            |
+ *    ,            |
+ *    ,            |
+ * 1010  (W)       | 1000 (S)
+ **/
+uint16_t correct_wind_direction(uint16_t direction)
+{
+    return (direction + 12) % 16;
+}
+
 void loop()
 {
     DataLogEntry log_entry;
@@ -154,6 +174,9 @@ void loop()
     gather_compass_data(&log_entry.compass_heading);
     gather_sht1x_data(&log_entry.sht15_temperature, &log_entry.sht15_humidity);
     log_entry.ntc_temperature = ntc.readTemperature();
+
+    /* correct the anemometer reading of the wind direction */
+    log_entry.wind_direction = correct_wind_direction(log_entry.wind_direction);
 
     logger.add_entry(log_entry);
 
