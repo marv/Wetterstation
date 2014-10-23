@@ -135,6 +135,6 @@ void loop()
 
     logger.add_entry(log_entry);
 
-    delay(10);
+    delay(20000);
 }
 
