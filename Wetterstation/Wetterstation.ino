@@ -14,6 +14,7 @@
 #include "NTC.h"
 #include "HMC6352.h"
 #include "DataLogger.h"
+#include "gps_module.h"
 
 Anemometer anemo(PIN_ANEMOMETER_DATA, PIN_ANEMOMETER_ENABLE);
 SHT1x sht1x(PIND_LUFTF_DATA, PIND_LUFTF_CLK);
@@ -78,6 +79,10 @@ void setup() {
     }
 
     Serial.println("card initialized.");
+
+
+    /** GPS **/
+    init_GPS();
 
 
     /** BMP085 **/
