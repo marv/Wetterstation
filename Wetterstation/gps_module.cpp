@@ -11,7 +11,7 @@ Was passiert wenn das GPS-Modul keine SPannung hat? Nicht getestet
 */
 /**********************************************************************************
 */
-#include "Adafruit_GPS.h"
+#include <Adafruit_GPS.h>
 #include "Pinning.h"
 #include "gps_module.h"
 
