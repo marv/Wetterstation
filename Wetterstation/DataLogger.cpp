@@ -63,7 +63,7 @@ DataLogger::add_entry(const DataLogEntry & entry)
                 sht15_humidityString,
                 ntc_temperatureString);
 
-        dataFile.println(log_line);
+        dataFile.print(log_line);
         dataFile.close();
 
         // print to the serial port too:
