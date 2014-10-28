@@ -52,7 +52,7 @@ DataLogger::add_entry(const DataLogEntry & entry)
         dtostrf(entry.sht15_humidity, 5, 2, sht15_humidityString);
         dtostrf(entry.ntc_temperature, 5, 2, ntc_temperatureString);
 
-        sprintf(log_line, "%s,%d,%d,%d,%d,%s,%s,%s,%s\n",
+        sprintf(log_line, "%s;%d;%d;%d;%d;%s;%s;%s;%s\n",
                 timeString,
                 entry.compass_heading,
                 entry.wind_direction,
