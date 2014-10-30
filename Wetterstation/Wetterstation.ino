@@ -29,7 +29,7 @@ Adafruit_BMP085 bmp;
 
 DataLogger logger(&rtc);
 
-MotorDriver motor_driver(PIND_MOTOR_L, PIND_MOTOR_R);
+MotorDriver motor_driver(PIND_MOTOR_L, PIND_MOTOR_R, PIND_MOTOR_ENABLE);
 SolarPanelPositioner positioner(&motor_driver);
 
 // On the Ethernet Shield, CS is pin 4. Note that even if it's not
@@ -100,7 +100,8 @@ void setup() {
         while (1) {}
     }
 
-    /** SolarPanelPositioner **/
+    /** MotorDriver & SolarPanelPositioner **/
+    motor_driver.init();
     positioner.calibrateCompass();
 }
 

@@ -10,22 +10,25 @@ class MotorDriver
 
     public:
 
-        MotorDriver(uint8_t pin_left, uint8_t pin_right);
+        MotorDriver(uint8_t pin_left, uint8_t pin_right, uint8_t pin_enable);
 
 
-        void turn_left() const;
+        void init() const;
 
-        void turn_right() const;
+        void turn_left(uint8_t speed) const;
+
+        void turn_right(uint8_t speed) const;
 
         void stop() const;
 
-        /** method to control velocity? **/
 
     private:
 
         uint8_t _pin_left;
 
         uint8_t _pin_right;
+
+        uint8_t _pin_enable;
 
 };
 
