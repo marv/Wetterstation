@@ -32,6 +32,10 @@ class SolarPanelPositioner
 
     private:
 
+        void motorControl(int difference);
+
+    private:
+
         MotorDriver * _driver;
 
         uint16_t _direction_setpoint;
