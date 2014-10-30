@@ -12,6 +12,7 @@
 //--------------------------------------------------------------------
 #define PIND_MOTOR_L            2           // Motorsteuerung L293 links
 #define PIND_MOTOR_R            3           // Motorsteuerung L293 rechts
+#define PIND_MOTOR_ENABLE       50          // Motor-Endlagentaster 2 (nicht verwendet)
 
 #define PIN_ANEMOMETER_DATA     22          // Anemometer Serial Data
 #define PIN_ANEMOMETER_ENABLE   23          // Anemometer Regulator Enable
