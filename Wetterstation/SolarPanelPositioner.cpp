@@ -74,9 +74,12 @@ SolarPanelPositioner::set_orientation(uint16_t orientation)
 
         differenz = Soll_Richtung - Ist_Richtung;
         if (abs(differenz) < 10)
+        {
+            _driver->stop();
             break;
+        }
 
-        Serial.println(differenz);
+        //Serial.println(differenz);
         motorControl(differenz);
 
         delay(100);
@@ -103,10 +106,6 @@ SolarPanelPositioner::motorControl(int diff)
         }
 
         _driver->turn_left(100 + diff);
-    }
-    else
-    {
-        _driver->stop();
     }
 }
 
