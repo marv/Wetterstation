@@ -40,8 +40,8 @@ const int chipSelect = 4;
 
 
 void setup() {
-    Serial.begin(9600);
-    Serial.println("Starting up...");
+    DEBUG_SERIAL.begin(9600);
+    DEBUG_SERIAL.println("Starting up...");
 
     Wire.begin();
 
@@ -49,7 +49,7 @@ void setup() {
     rtc.begin();
     if (! rtc.isrunning())
     {
-        Serial.println("RTC is NOT running!");
+        DEBUG_SERIAL.println("RTC is NOT running!");
 
         // following line sets the RTC to the date & time this sketch was compiled
         rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
@@ -64,16 +64,16 @@ void setup() {
     DateTime now = rtc.now();
     sprintf(dateString, "%02d-%02d-%04d", now.day(), now.month(), now.year());
 
-    Serial.print("DS1307 RTC date: ");
-    Serial.println(dateString);
+    DEBUG_SERIAL.print("DS1307 RTC date: ");
+    DEBUG_SERIAL.println(dateString);
 
     sprintf(timeString, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
-    Serial.print("DS1307 RTC time: ");
-    Serial.println(timeString);
+    DEBUG_SERIAL.print("DS1307 RTC time: ");
+    DEBUG_SERIAL.println(timeString);
 
 
     /** SD card **/
-    Serial.print("Initializing SD card...");
+    DEBUG_SERIAL.print("Initializing SD card...");
     // make sure that the default chip select pin is set to
     // output, even if you don't use it:
     pinMode(10, OUTPUT);
@@ -81,12 +81,12 @@ void setup() {
     // see if the card is present and can be initialized:
     if (! SD.begin(chipSelect))
     {
-        Serial.println("Card failed, or not present");
+        DEBUG_SERIAL.println("Card failed, or not present");
         // don't do anything more:
         return;
     }
 
-    Serial.println("card initialized.");
+    DEBUG_SERIAL.println("card initialized.");
 
 
     /** GPS **/
@@ -96,7 +96,7 @@ void setup() {
     /** BMP085 **/
     if (!bmp.begin())
     {
-        Serial.println("Could not find a valid BMP085 sensor, check wiring!");
+        DEBUG_SERIAL.println("Could not find a valid BMP085 sensor, check wiring!");
         while (1) {}
     }
 
@@ -168,8 +168,14 @@ void loop()
     /* get position from GPS */
     struct gps_data gps = get_position_GPS();
 
+    DEBUG_SERIAL.println("*** GPS Info ***");
+    DEBUG_SERIAL.print("Fix: "); DEBUG_SERIAL.println(gps.fix);
+    DEBUG_SERIAL.print("Lon: "); DEBUG_SERIAL.println(gps.longitude);
+    DEBUG_SERIAL.print("Lat: "); DEBUG_SERIAL.println(gps.latitude);
+    DEBUG_SERIAL.print("Alt: "); DEBUG_SERIAL.println(gps.altitude);
+    DEBUG_SERIAL.println();
 
-    Serial.println("Acquiring data from all sensors...");
+    DEBUG_SERIAL.println("Acquiring data from all sensors...");
     gather_anemometer_data(&log_entry.wind_direction, &log_entry.wind_speed);
     gather_bmp085_data(&log_entry.bmp085_temperature, &log_entry.bmp085_pressure);
     gather_compass_data(&log_entry.compass_heading);
@@ -185,7 +191,6 @@ void loop()
     /** solar panel positioning **/
     uint16_t sun_position = SunPositionEstimator::get_estimate(now, &gps);
     positioner.set_orientation(sun_position);
-
 
     delay(20000);
 }

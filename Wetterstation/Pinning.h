@@ -7,6 +7,13 @@
  * Headerfile für Pinnings
  **/
 
+/**
+ * Define which serial port to use for debugging
+ *
+ * this makes it easier to switch between USB cable and ZigBee
+ **/
+#define DEBUG_SERIAL            Serial2
+
 //--------------------------------------------------------------------
 //      Name                    Due-Pin     Bezeichnung
 //--------------------------------------------------------------------

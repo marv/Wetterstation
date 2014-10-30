@@ -76,7 +76,7 @@ wenn kein fix vorhanden ist und die vorgebene Zyklenzahl überschritten wird.*/
             nmeaSentence = GPS.lastNMEA();
         
          #if DEBUG_GPS
-         Serial.println(nmeaSentence); Serial.print("\n");
+         DEBUG_SERIAL.println(nmeaSentence); DEBUG_SERIAL.print("\n");
          #endif
          /*parse() extrahiert die Informationen und macht diese im GPS Objekt verfügbar.*/
             GPS.parse(nmeaSentence);  
@@ -103,8 +103,8 @@ wenn kein fix vorhanden ist und die vorgebene Zyklenzahl überschritten wird.*/
        }
  }
 #if DEBUG_GPS
-   Serial.print("Anzahl read() : "); Serial.print(loop_count); Serial.print("\n");
-   Serial.print("Anzahl empfangene NMAEA: "); Serial.print(debug_nmea_count); Serial.print("\n");
+   DEBUG_SERIAL.print("Anzahl read() : "); DEBUG_SERIAL.print(loop_count); DEBUG_SERIAL.print("\n");
+   DEBUG_SERIAL.print("Anzahl empfangene NMAEA: "); DEBUG_SERIAL.print(debug_nmea_count); DEBUG_SERIAL.print("\n");
 #endif
    return output;
 }

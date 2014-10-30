@@ -7,6 +7,7 @@
 #include <SD.h>
 #include <RTClib.h>
 
+#include "Pinning.h"
 #include "DataLogger.h"
 
 DataLogger::DataLogger(RTC_DS1307 * rtc) :
@@ -19,14 +20,14 @@ DataLogger::add_entry(const DataLogEntry & entry)
 {
     char dateString[10];
 
-    Serial.println("Adding new log entry...");
+    DEBUG_SERIAL.println("Adding new log entry...");
 
-    Serial.println("Querying RTC to get date");
+    DEBUG_SERIAL.println("Querying RTC to get date");
     DateTime now = _rtc->now();
 
     sprintf(dateString, "%04d%02d%02d", now.year(), now.month(), now.day());
-    Serial.print("DS1307 RTC date: ");
-    Serial.println(dateString);
+    DEBUG_SERIAL.print("DS1307 RTC date: ");
+    DEBUG_SERIAL.println(dateString);
 
     char filename[15];
     sprintf(filename, "%s.csv", dateString);
@@ -40,8 +41,8 @@ DataLogger::add_entry(const DataLogEntry & entry)
         char timeString[9];
 
         sprintf(timeString, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
-        Serial.print("DS1307 RTC time: ");
-        Serial.println(timeString);
+        DEBUG_SERIAL.print("DS1307 RTC time: ");
+        DEBUG_SERIAL.println(timeString);
 
         char bmp085_temperatureString[5];
         char sht15_temperatureString[5];
@@ -67,11 +68,11 @@ DataLogger::add_entry(const DataLogEntry & entry)
         dataFile.close();
 
         // print to the serial port too:
-        Serial.println(log_line);
+        DEBUG_SERIAL.println(log_line);
     }
     else
     {
-        Serial.println("error opening datalog.txt");
+        DEBUG_SERIAL.println("error opening datalog.txt");
     }
 
 }
