@@ -22,15 +22,19 @@ MotorDriver::init() const
 void
 MotorDriver::turn_left(uint8_t speed) const
 {
+    digitalWrite(_pin_enable, HIGH);
     analogWrite(_pin_left, speed);
     analogWrite(_pin_right, 0);
+    digitalWrite(_pin_enable, LOW);
 }
 
 void
 MotorDriver::turn_right(uint8_t speed) const
 {
+    digitalWrite(_pin_enable, HIGH);
     analogWrite(_pin_left, 0);
     analogWrite(_pin_right, speed);
+    digitalWrite(_pin_enable, LOW);
 }
 
 void
@@ -38,4 +42,5 @@ MotorDriver::stop() const
 {
     analogWrite(_pin_left, 0);
     analogWrite(_pin_right, 0);
+    digitalWrite(_pin_enable, LOW);
 }
