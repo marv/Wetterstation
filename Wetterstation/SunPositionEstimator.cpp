@@ -6,10 +6,15 @@ uint16_t
 SunPositionEstimator::get_estimate(const DateTime & datetime,
                                    struct gps_data * gps)
 {
+    uint16_t sun_direction;
     uint8_t hour, minute;
 
     hour = datetime.hour();
     minute = datetime.minute();
+
+    sun_direction = 15 * (hour - 6);
+
+    return sun_direction;
 
     /* do we have a GPS fix? */
     if (gps->fix)
