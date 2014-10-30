@@ -7,3 +7,6 @@
 [submodule "libraries/Adafruit-BMP085-Library"]
 	path = libraries/Adafruit-BMP085-Library
 	url = https://github.com/adafruit/Adafruit-BMP085-Library.git
+[submodule "libraries/SHT1x"]
+	path = libraries/SHT1x
+	url = https://github.com/practicalarduino/SHT1x.git
