@@ -4,3 +4,6 @@
 [submodule "libraries/RTClib"]
 	path = libraries/RTClib
 	url = https://github.com/adafruit/RTClib.git
+[submodule "libraries/Adafruit-BMP085-Library"]
+	path = libraries/Adafruit-BMP085-Library
+	url = https://github.com/adafruit/Adafruit-BMP085-Library.git
