@@ -28,8 +28,8 @@
 #define PINSDA_I2C              20          // RTC, Druck, Kompass I2C SDA
 #define PINSCL_I2C              21          // RTC, Druck, Kompass I2C SCL
 
-#define PIND_LUFTF_DATA         10          // Luftfeuchte-Sensor Daten
-#define PIND_LUFTF_CLK          11          // Luftfeuchte-Sensor Clock
+#define PIND_LUFTF_DATA         24          // Luftfeuchte-Sensor Daten
+#define PIND_LUFTF_CLK          25          // Luftfeuchte-Sensor Clock
 
 #define PIND_ENABLE_GPS			39			// TB 30.10.14 Deaktivierung des GPS_Modul 
 #define PIND_CS_SDCARD          51          // Chip-Select SD-Kartenleser
