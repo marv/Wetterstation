@@ -30,6 +30,8 @@
 #define PIND_LUFTF_DATA         10          // Luftfeuchte-Sensor Daten
 #define PIND_LUFTF_CLK          11          // Luftfeuchte-Sensor Clock
 
+#define PIND_ENABLE_GPS			39			// TB 30.10.14 Deaktivierung des GPS_Modul 
+
 #define PIND_ENDLAGE1           49          // Motor-Endlagentaster 1
 #define PIND_ENDLAGE2           50          // Motor-Endlagentaster 2 (nicht verwendet)
 

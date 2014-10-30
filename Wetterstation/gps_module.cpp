@@ -15,13 +15,17 @@ Was passiert wenn das GPS-Modul keine SPannung hat? Nicht getestet
 #include "Pinning.h"
 #include "gps_module.h"
 
+
 Adafruit_GPS GPS(&GPS_SERIAL);
 
 /*
 Initialisiert das GPS Modul. Muss vor der Verwendung von get_position_GPS() einmalig aufgerufen werden.
 */
 void init_GPS(){
-  
+   /*Definiere den Ausgang zur Aktivierung des GPS-Moduls als Ausgang.*/
+   pinMode(PIND_ENABLE_GPS, OUTPUT);
+   /*Aktiviere GPS-Modul*/
+   enable_GPS();
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(BAUD_GPS);
   GPS_SERIAL.begin(BAUD_GPS);  
@@ -54,6 +58,8 @@ struct gps_data get_position_GPS(){
     #if DEBUG_GPS
    int  debug_nmea_count=0;
    #endif
+   
+  
    /*Der Aufruf von read() muss in einer Schleife erfolgen. Durch die Festlegung der Aktualisierungsrate
    während der Initiliserung wird eine wird die Rate festgelegt, mit der neue Daten zur Verfügung stehen.
   Der Aufruf von read() muss solange wiederholt werden, bis ein vollständiger Datensatz vorgefunden wird.
@@ -103,3 +109,11 @@ wenn kein fix vorhanden ist und die vorgebene Zyklenzahl überschritten wird.*/
    return output;
 }
 
+/* Die Funktion aktiviert das GPS-Modul. Diese Funktion ist eine interne Funktion von init_GPS(). Soll das GPS Modul aktivert werden, somuss init_GPS() aufgerufen werden, da notwendig Einstellung ansonsten nicht geladen werden, die bei der Deaktivierung der SPannung verloren gehen.*/
+void enable_GPS(){
+digitalWrite(PIND_ENABLE_GPS, HIGH); 
+}
+/* Deaktiviert das GPS-Modul. Nach der Deaktivierung ist das GPS-Modul Spannungsfrei, verbraucht damit keine Energie mehr. Soll das Modul wieder aktiviert werden, muss init_GPS() aufgerufen werden.*/
+void disable_GPS(){
+digitalWrite(PIND_ENABLE_GPS, LOW); 
+}

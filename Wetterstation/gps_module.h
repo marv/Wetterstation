@@ -20,6 +20,8 @@ struct gps_data{
 **/
 struct gps_data get_position_GPS();
 void init_GPS();
+void enable_GPS();
+void disable_GPS();
 
 /**********************************************************************************
 *Defines
@@ -38,5 +40,6 @@ void init_GPS();
  Sollte nicht kleiner als 1000000 gewählt werden.    
 */
 #define LCGETGPS 1000000                            
+
 
 #endif
