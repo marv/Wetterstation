@@ -1,3 +1,6 @@
 [submodule "libraries/Adafruit-GPS-Library"]
 	path = libraries/Adafruit-GPS-Library
 	url = https://github.com/adafruit/Adafruit-GPS-Library.git
+[submodule "libraries/RTClib"]
+	path = libraries/RTClib
+	url = https://github.com/adafruit/RTClib.git
