@@ -1,0 +1,16 @@
+In this folder we track all external libraries we use.
+
+Make sure to copy or link them into your Arduino library path.
+
+To add a new submodule for a library follow these steps
+
+    # change into libraries folder
+    $ cd libraries/
+
+    # add the git submodule
+    $ git submodule add <url>
+
+    # commit it
+    $ git commit -m "Add submodule for ..."
+
+
