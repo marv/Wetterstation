@@ -20,6 +20,8 @@
 #include "MotorDriver.h"
 #include "SolarPanelPositioner.h"
 
+#include "RTCInternalManagement.h"
+
 #define BATTERY_VOLTAGE_TO_VOLTS   3.3 / 1024 * 6
 
 Anemometer anemo(PIN_ANEMOMETER_DATA, PIN_ANEMOMETER_ENABLE);
@@ -60,18 +62,8 @@ void setup() {
         // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
     }
 
-    char dateString[12];
-    char timeString[8];
-
-    DateTime now = rtc.now();
-    sprintf(dateString, "%02d-%02d-%04d", now.day(), now.month(), now.year());
-
-    DEBUG_SERIAL.print("DS1307 RTC date: ");
-    DEBUG_SERIAL.println(dateString);
-
-    sprintf(timeString, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
-    DEBUG_SERIAL.print("DS1307 RTC time: ");
-    DEBUG_SERIAL.println(timeString);
+    /** Clocks **/
+    synchronize_clocks();
 
 
     /** SD card **/
@@ -158,6 +150,29 @@ gather_sht1x_data(float * temperature, float * humidity)
 uint16_t correct_wind_direction(uint16_t direction)
 {
     return (direction + 12) % 16;
+}
+
+/**
+ * Set internal RTC from external DS1307 RTC
+ **/
+void synchronize_clocks()
+{
+    char dateString[12];
+    char timeString[8];
+
+    DateTime now = rtc.now();
+    sprintf(dateString, "%02d-%02d-%04d", now.day(), now.month(), now.year());
+
+    DEBUG_SERIAL.print("DS1307 RTC date: ");
+    DEBUG_SERIAL.println(dateString);
+
+    sprintf(timeString, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
+    DEBUG_SERIAL.print("DS1307 RTC time: ");
+    DEBUG_SERIAL.println(timeString);
+
+    DEBUG_SERIAL.println("Setting internal RTC to date/time from ext. RTC");
+    struct internalTime intTime = convertFromExtRTC(now);
+    setRTC(intTime);
 }
 
 void loop()
