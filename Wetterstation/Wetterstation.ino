@@ -20,6 +20,8 @@
 #include "MotorDriver.h"
 #include "SolarPanelPositioner.h"
 
+#define BATTERY_VOLTAGE_TO_VOLTS   3.3 / 1024 * 6
+
 Anemometer anemo(PIN_ANEMOMETER_DATA, PIN_ANEMOMETER_ENABLE);
 SHT1x sht1x(PIND_LUFTF_DATA, PIND_LUFTF_CLK);
 NTC ntc(PINA_TEMP);
@@ -181,6 +183,12 @@ void loop()
     gather_compass_data(&log_entry.compass_heading);
     gather_sht1x_data(&log_entry.sht15_temperature, &log_entry.sht15_humidity);
     log_entry.ntc_temperature = ntc.readTemperature();
+
+    /* linearize current measurement */
+    log_entry.adc_solar_current = ((float)analogRead(1) + 47.31f) / 3915.48f;
+
+    /* convert ADC value to voltage */
+    log_entry.adc_battery_voltage = (float)analogRead(2) * BATTERY_VOLTAGE_TO_VOLTS;
 
     /* correct the anemometer reading of the wind direction */
     log_entry.wind_direction = correct_wind_direction(log_entry.wind_direction);

@@ -23,6 +23,9 @@ class DataLogEntry
 
         float    ntc_temperature;
 
+        float    adc_solar_current;
+        float    adc_battery_voltage;
+
 };
 
 class DataLogger

@@ -48,12 +48,16 @@ DataLogger::add_entry(const DataLogEntry & entry)
         char sht15_temperatureString[5];
         char sht15_humidityString[5];
         char ntc_temperatureString[5];
+        char solar_current_string[5];
+        char battery_voltage_string[5];
         dtostrf(entry.bmp085_temperature, 5, 2, bmp085_temperatureString);
         dtostrf(entry.sht15_temperature, 5, 2, sht15_temperatureString);
         dtostrf(entry.sht15_humidity, 5, 2, sht15_humidityString);
         dtostrf(entry.ntc_temperature, 5, 2, ntc_temperatureString);
+        dtostrf(entry.adc_solar_current, 5, 2, solar_current_string);
+        dtostrf(entry.adc_battery_voltage, 5, 2, battery_voltage_string);
 
-        sprintf(log_line, "%s;%d;%d;%d;%d;%s;%s;%s;%s\n",
+        sprintf(log_line, "%s;%d;%d;%d;%d;%s;%s;%s;%s;%s;%s\n",
                 timeString,
                 entry.compass_heading,
                 entry.wind_direction,
@@ -62,7 +66,9 @@ DataLogger::add_entry(const DataLogEntry & entry)
                 bmp085_temperatureString,
                 sht15_temperatureString,
                 sht15_humidityString,
-                ntc_temperatureString);
+                ntc_temperatureString,
+                solar_current_string,
+                battery_voltage_string);
 
         dataFile.print(log_line);
         dataFile.close();
