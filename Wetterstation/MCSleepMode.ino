@@ -30,7 +30,7 @@ void enterWaitMode(short waitPeriod, unsigned long serialBaud){
     waitMinutes += waitPeriod;
   }
   
-  setALARM(currentMinute + waitMinutes);
+  setALARM(waitMinutes);
   
   Serial.end();	
   delay(2); //wait for communication to stabilize
