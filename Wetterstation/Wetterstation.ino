@@ -21,6 +21,7 @@
 #include "SolarPanelPositioner.h"
 
 #include "RTCInternalManagement.h"
+#include "MCSleepMode.h"
 
 #define BATTERY_VOLTAGE_TO_VOLTS   3.3 / 1024 * 6
 
@@ -215,6 +216,6 @@ void loop()
     uint16_t sun_position = SunPositionEstimator::get_estimate(now, &gps);
     positioner.set_orientation(sun_position);
 
-    delay(20000);
+    enterWaitMode(15, 9600);
 }
 
