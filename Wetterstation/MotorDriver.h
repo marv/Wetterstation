@@ -15,6 +15,8 @@ class MotorDriver
 
         void init() const;
 
+        void enable(bool enable) const;
+
         void turn_left(uint8_t speed) const;
 
         void turn_right(uint8_t speed) const;
