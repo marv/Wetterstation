@@ -17,18 +17,18 @@ Historie:
 void enterWaitMode(short waitPeriod, unsigned long serialBaud){
   uint32_t PllarVal =0;
   uint32_t MckrVal  =0;
-  uint32_t MorVal  =0;
   uint8_t currentMinute =0;
   short waitMinutes = 0;
   
   //Set RTC to wake up after the defined amount of minutes //lieber zu regelmäßigen zeitpunkten oder lieber mit genauer wartezeit?
   RTC_GetTime(RTC, 0, &currentMinute, 0);
   
-  waitMinutes = ((REG_RTC_TIMALR & RTC_TIMALR_MIN_Msk) >> RTC_TIMALR_MIN_Pos);
+  waitMinutes =  ((REG_RTC_TIMALR & 0x00007000) >> 12) * 10    //get and convert time value
+               + ((REG_RTC_TIMALR & 0x00000F00) >> 8);
   
-  while (waitMinutes <= currentMinute){
+  do{
     waitMinutes += waitPeriod;
-  }
+  }while (waitMinutes <= currentMinute && waitMinutes < 60);  //calculate new wakup minute
   
   setALARM(waitMinutes);
   
