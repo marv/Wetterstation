@@ -10,6 +10,9 @@ Historie:
 #ifndef _RTCINTERNLALMANAGEMENT_H_
 #define _RTCINTERNLALMANAGEMENT_H_
 
+#include <Arduino.h>
+#include <RTClib.h>
+
 //Prototypes
 void setALARM(short minutes);
 
@@ -24,4 +27,10 @@ struct internalTime{
   byte minute;	//
   byte second;	//
 };
+
+
+struct internalTime convertFromExtRTC(DateTime timeIn);
+
+void setRTC(struct internalTime timeIn);
+
 #endif

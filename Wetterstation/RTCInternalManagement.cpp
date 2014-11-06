@@ -8,54 +8,11 @@ Historie:
 -Ersterstellung
 */
 
-#include <Arduino.h>
-#include <RTClib.h>
 #include <Wire.h>
 #include "Pinning.h"
 #include "RTCInternalManagement.h"
 #include "MCSleepMode.h"
 
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  Serial.println("moin");
-  pinMode(PIN_LED, OUTPUT);
-  
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-  
-  digitalWrite(PIND_LED, HIGH);   // turn the LED on (HIGH is the voltage level)
-/*  Serial.println("AN");
-  
-  Serial.println(REG_SUPC_SR);
-  Serial.println(REG_SUPC_WUMR);
-  Serial.println(REG_PMC_FSMR);
-  Serial.println(REG_RTC_SR);
-  pmc_enable_waitmode();
-  //delay(100);
-  digitalWrite(PIND_LED, LOW);    // turn the LED off by making the voltage LOW
-  //delay(100);              // wait for a second
-  //enterWaitMode();
-  Serial.println("AUS");
-  
-  Serial.println(REG_SUPC_SR);
-  Serial.println(REG_SUPC_WUMR);
-  Serial.println(REG_PMC_FSMR);
-  Serial.println(REG_RTC_SR);
-  pmc_enable_waitmode();
-  RTC_ClearSCCR(RTC, RTC_SCCR_ALRCLR | RTC_SCCR_SECCLR | RTC_SCCR_TIMCLR ); //| RTC_SCCR_SECCLR | RTC_SCCR_TIMCLR
-  REG_PMC_FSMR &= ~PMC_FSMR_LPM;
-  //delay(100);*/
-  
-  Serial.println("AN");
-  enterWaitMode(1, 9600);
-  
-  digitalWrite(PIND_LED, LOW);    // turn the LED off by making the voltage LOW
-  Serial.println("AUS");
-  enterWaitMode(1, 9600);
-}
 
 /**
  * For documentation on input datatype see: https://github.com/adafruit/RTClib/blob/master/RTClib.h#L10
