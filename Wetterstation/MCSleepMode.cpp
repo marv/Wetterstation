@@ -10,6 +10,9 @@ Historie:
 
 #include "RTCInternalManagement.h"
 
+static void _SwitchMck2FastRC( uint32_t dwMoscrcf, uint32_t dwPres );
+static void RestoreWorkingClock( uint32_t PllarVal, uint32_t MckrVal );
+
 /**
  * \brief Enter WAIT Mode.
  *
