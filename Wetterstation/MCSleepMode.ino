@@ -14,14 +14,22 @@ Historie:
  * \brief Enter WAIT Mode.
  *
  */
-void enterWaitMode(short waitMinutes, unsigned long serialBaud){
+void enterWaitMode(short waitPeriod, unsigned long serialBaud){
   uint32_t PllarVal =0;
   uint32_t MckrVal  =0;
   uint32_t MorVal  =0;
   uint8_t currentMinute =0;
+  short waitMinutes = 0;
   
   //Set RTC to wake up after the defined amount of minutes //lieber zu regelmäßigen zeitpunkten oder lieber mit genauer wartezeit?
   RTC_GetTime(RTC, 0, &currentMinute, 0);
+  
+  waitMinutes = ((REG_RTC_TIMALR & RTC_TIMALR_MIN_Msk) >> RTC_TIMALR_MIN_Pos);
+  
+  while (waitMinutes <= currentMinute){
+    waitMinutes += waitPeriod;
+  }
+  
   setALARM(currentMinute + waitMinutes);
   
   Serial.end();	
