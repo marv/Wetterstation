@@ -21,8 +21,10 @@ SolarPanelPositioner::calibrateCompass() const
     delay(100);
 
     /* turn right for 20 seconds with speed 20 */
+    _driver->enable(true);
     _driver->turn_right(130);
     delay(20000);
+    _driver->enable(false);
 
     /* stop calibration and motor */
     HMC6352.StopCalibration();
@@ -59,7 +61,7 @@ SolarPanelPositioner::set_orientation(uint16_t orientation)
         Soll_Richtung = Soll_Richtung + 360;
     }
 
-
+    _driver->enable(true);
     while (1)
     {
         HMC6352.Wake();
@@ -84,6 +86,7 @@ SolarPanelPositioner::set_orientation(uint16_t orientation)
 
         delay(100);
     }
+    _driver->enable(false);
 }
 
 void
