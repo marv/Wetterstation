@@ -1,6 +1,6 @@
-/*Headerfile für Pinnings
+/*Skript für Sleep Modes des MC
 
-Stand:25.09.2014
+Stand: 06.11.2014
 Version: 1.0.0
 Letzte Änderung: TR
 
@@ -14,7 +14,11 @@ static void _SwitchMck2FastRC( uint32_t dwMoscrcf, uint32_t dwPres );
 static void RestoreWorkingClock( uint32_t PllarVal, uint32_t MckrVal );
 
 /**
- * \brief Enter WAIT Mode.
+ * \brief Enter WAIT mode.
+ * Enters wait mode based on
+ *
+ * \param waitPeriod 	Main On-Chip RC Oscillator Frequency Selection.
+ * \param serialBaud    Processor Clock Prescaler.
  *
  */
 void enterWaitMode(short waitPeriod, unsigned long serialBaud){
