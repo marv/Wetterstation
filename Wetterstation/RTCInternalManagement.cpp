@@ -1,6 +1,6 @@
-/*Headerfile für Pinnings
+/*Skript für Handling der internen RTCs
 
-Stand:25.09.2014
+Stand: 06.11.2014
 Version: 1.0.0
 Letzte Änderung: TR
 
@@ -15,8 +15,10 @@ Historie:
 
 
 /**
+ * \brief Converts a struct of type DateTime to an internal time struct.
  * For documentation on input datatype see: https://github.com/adafruit/RTClib/blob/master/RTClib.h#L10
  *
+ * \param timeIn A struct of type DateTime.
  */
 struct internalTime convertFromExtRTC(DateTime timeIn){
   struct internalTime timeOut;
@@ -34,8 +36,10 @@ struct internalTime convertFromExtRTC(DateTime timeIn){
 }
 
 /**
- * For documentation on input datatype see: https://github.com/adafruit/RTClib/blob/master/RTClib.h#L10
+ * \brief Converts an internal time struct to a struct of type DateTime
+ * For documentation on output datatype see: https://github.com/adafruit/RTClib/blob/master/RTClib.h#L10
  *
+ * \param timeIn A struct of the internal time type
  */
 DateTime convertToExtRTC(struct internalTime timeIn){
   DateTime timeOut;
@@ -53,8 +57,9 @@ DateTime convertToExtRTC(struct internalTime timeIn){
 }
 
 /**
- * \brief DOC.
+ * \brief Sets the internal RTC based on the parameter.
  *
+ * \param timeIn the struct used to set the internal RTC
  */
 void setRTC(struct internalTime timeIn){
   
@@ -63,8 +68,12 @@ void setRTC(struct internalTime timeIn){
 }
 
 /**
- * \brief DOC.
+ * \brief Sets the alarm of the internal RTC.
+ * Before setting the alarm to the value of the parameter the parameter is checked if 
+ * it exceeds the maximum value of 59 and reduced by 60 until it satisfies the expectation.
+ * Apart from that a Error message will be sent via Serial if the alarm could not be set.
  *
+ * \param minutes The minute which the alarm will be set to.
  */
 void setALARM(short minutes){
   byte byte_minutes = (byte)minutes;

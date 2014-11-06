@@ -15,10 +15,11 @@ static void RestoreWorkingClock( uint32_t PllarVal, uint32_t MckrVal );
 
 /**
  * \brief Enter WAIT mode.
- * Enters wait mode based on
+ * Enters wait mode taking all required steps for activating the mode and waking up from it.
+ * The time after which the Processor wakes up from wait mode is calculated by adding the waitPeriod to the last setting of the wake up time.
  *
- * \param waitPeriod 	Main On-Chip RC Oscillator Frequency Selection.
- * \param serialBaud    Processor Clock Prescaler.
+ * \param waitPeriod 	The period after which the alarm is suppused to ring.
+ * \param serialBaud    Baudrate with which the serial communication will be restarted after wait mode.
  *
  */
 void enterWaitMode(short waitPeriod, unsigned long serialBaud){
@@ -27,10 +28,10 @@ void enterWaitMode(short waitPeriod, unsigned long serialBaud){
   uint8_t currentMinute =0;
   short waitMinutes = 0;
   
-  //Set RTC to wake up after the defined amount of minutes //lieber zu regelmäßigen zeitpunkten oder lieber mit genauer wartezeit?
+  //Set RTC to wake up after the defined amount of minutes
   RTC_GetTime(RTC, 0, &currentMinute, 0);
   
-  waitMinutes =  ((REG_RTC_TIMALR & 0x00007000) >> 12) * 10    //get and convert time value
+  waitMinutes =  ((REG_RTC_TIMALR & 0x00007000) >> 12) * 10    //get and convert alarm time value
                + ((REG_RTC_TIMALR & 0x00000F00) >> 8);
   
   do{
