@@ -14,54 +14,56 @@ Historie:
  * \brief Enter WAIT Mode.
  *
  */
-void enterWaitMode(short waitPeriod, unsigned long serialBaud){
-  uint32_t PllarVal =0;
-  uint32_t MckrVal  =0;
-  uint8_t currentMinute =0;
-  short waitMinutes = 0;
-  
-  //Set RTC to wake up after the defined amount of minutes //lieber zu regelmäßigen zeitpunkten oder lieber mit genauer wartezeit?
-  RTC_GetTime(RTC, 0, &currentMinute, 0);
-  
-  waitMinutes =  ((REG_RTC_TIMALR & 0x00007000) >> 12) * 10    //get and convert time value
-               + ((REG_RTC_TIMALR & 0x00000F00) >> 8);
-  
-  do{
-    waitMinutes += waitPeriod;
-  }while (waitMinutes <= currentMinute && waitMinutes < 60);  //calculate new wakup minute
-  
-  setALARM(waitMinutes);
-  
-  Serial.end();	
-  delay(2); //wait for communication to stabilize
-  
-  //save current working clock settings
-  PllarVal = REG_CKGR_PLLAR;
-  MckrVal  = REG_PMC_MCKR;
-  
-  //Disable Brownout Detector
-  REG_SUPC_MR |= SUPC_MR_KEY(0xA5) | SUPC_MR_BODDIS_DISABLE; 
-  
-  //Configure 4Mhz fast RC oscillator
-  _SwitchMck2FastRC( CKGR_MOR_MOSCRCF_4_MHz, PMC_MCKR_PRES_CLK_1 );
-  
-  //Set wakeup input for fast startup
-  pmc_set_fast_startup_input(PMC_FSMR_RTCAL);   //Enable Timer Wakeup
-  
-  //Enter Wait Mode
-  pmc_enable_waitmode();
-    
-  //Restore working clock settings
-  RestoreWorkingClock( PllarVal, MckrVal );
-  
-  //Enable Brownout Detector
-  REG_SUPC_MR = (REG_SUPC_MR |SUPC_MR_KEY(0xA5)) & ~SUPC_MR_BODDIS; 
-  
-  //Reset Flags
-  RTC_ClearSCCR(RTC, RTC_SCCR_ACKCLR | RTC_SCCR_ALRCLR | RTC_SCCR_SECCLR | RTC_SCCR_TIMCLR | RTC_SCCR_CALCLR );
-  
-  Serial.begin(serialBaud);
+void enterWaitMode(short waitPeriod, unsigned long serialBaud)
+{
+    uint32_t PllarVal =0;
+    uint32_t MckrVal  =0;
+    uint32_t MorVal  =0;
+    uint8_t currentMinute =0;
+    short waitMinutes = 0;
+
+    //Set RTC to wake up after the defined amount of minutes //lieber zu regelmäßigen zeitpunkten oder lieber mit genauer wartezeit?
+    RTC_GetTime(RTC, 0, &currentMinute, 0);
+
+    waitMinutes = ((REG_RTC_TIMALR & RTC_TIMALR_MIN_Msk) >> RTC_TIMALR_MIN_Pos);
+
+    while (waitMinutes <= currentMinute){
+        waitMinutes += waitPeriod;
+    }
+
+    setALARM(waitMinutes);
+
+    Serial.end();	
+    delay(2); //wait for communication to stabilize
+
+    //save current working clock settings
+    PllarVal = REG_CKGR_PLLAR;
+    MckrVal  = REG_PMC_MCKR;
+
+    //Disable Brownout Detector
+    REG_SUPC_MR |= SUPC_MR_KEY(0xA5) | SUPC_MR_BODDIS_DISABLE; 
+
+    //Configure 4Mhz fast RC oscillator
+    _SwitchMck2FastRC( CKGR_MOR_MOSCRCF_4_MHz, PMC_MCKR_PRES_CLK_1 );
+
+    //Set wakeup input for fast startup
+    pmc_set_fast_startup_input(PMC_FSMR_RTCAL);   //Enable Timer Wakeup
+
+    //Enter Wait Mode
+    pmc_enable_waitmode();
+
+    //Restore working clock settings
+    RestoreWorkingClock( PllarVal, MckrVal );
+
+    //Enable Brownout Detector
+    REG_SUPC_MR = (REG_SUPC_MR |SUPC_MR_KEY(0xA5)) & ~SUPC_MR_BODDIS; 
+
+    //Reset Flags
+    RTC_ClearSCCR(RTC, RTC_SCCR_ACKCLR | RTC_SCCR_ALRCLR | RTC_SCCR_SECCLR | RTC_SCCR_TIMCLR | RTC_SCCR_CALCLR );
+
+    Serial.begin(serialBaud);
 }
+
 /**
  * \brief Switch MCK to FastRC (Main On-Chip RC Oscillator).
  *
@@ -121,9 +123,9 @@ static void RestoreWorkingClock( uint32_t PllarVal, uint32_t MckrVal )
 
     /* Restart PLL A */
     pmc_enable_pllack((PllarVal&CKGR_PLLAR_MULA_Msk)>>CKGR_PLLAR_MULA_Pos,
-	              (PllarVal&CKGR_PLLAR_PLLACOUNT_Msk)>>CKGR_PLLAR_PLLACOUNT_Pos,
-                      (PllarVal&CKGR_PLLAR_DIVA_Msk)>>CKGR_PLLAR_DIVA_Pos
-                     );
+            (PllarVal&CKGR_PLLAR_PLLACOUNT_Msk)>>CKGR_PLLAR_PLLACOUNT_Pos,
+            (PllarVal&CKGR_PLLAR_DIVA_Msk)>>CKGR_PLLAR_DIVA_Pos
+            );
 
     /* Switch to fast clock */
     PMC->PMC_MCKR = (MckrVal & (uint32_t)~PMC_MCKR_CSS_Msk) | PMC_MCKR_CSS_MAIN_CLK ;
@@ -132,3 +134,4 @@ static void RestoreWorkingClock( uint32_t PllarVal, uint32_t MckrVal )
     PMC->PMC_MCKR = MckrVal ;
     while ( !(PMC->PMC_SR & PMC_SR_MCKRDY) ) ;
 }
+
