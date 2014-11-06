@@ -1,6 +1,6 @@
-/*Headerfile für Handling der internen RTC des MCs
+/*Headerfile für Pinnings
 
-Stand: 06.11.2014
+Stand:25.09.2014
 Version: 1.0.0
 Letzte Änderung: TR
 
@@ -10,14 +10,11 @@ Historie:
 #ifndef _RTCINTERNLALMANAGEMENT_H_
 #define _RTCINTERNLALMANAGEMENT_H_
 
-//Includes
 #include <Arduino.h>
 #include <RTClib.h>
 
 //Prototypes
-void   setALARM(short minutes);
-struct internalTime convertFromExtRTC(DateTime timeIn);
-void   setRTC(struct internalTime timeIn);
+void setALARM(short minutes);
 
 //Structs
 struct internalTime{
@@ -30,5 +27,10 @@ struct internalTime{
   byte minute;	//
   byte second;	//
 };
+
+
+struct internalTime convertFromExtRTC(DateTime timeIn);
+
+void setRTC(struct internalTime timeIn);
 
 #endif
