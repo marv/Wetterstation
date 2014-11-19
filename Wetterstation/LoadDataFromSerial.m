@@ -48,7 +48,7 @@ while(stop_flag)
 line = fgetl(s);
 if ischar(line)
     disp(line);
-    fprintf(fid,'%s\n',line);
+    fprintf(fid,'%s',line);
 end
 
 pause(0.0001);
