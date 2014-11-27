@@ -1,20 +1,13 @@
 /*
 * gps_module.cpp
-* Functions for initialization and requesting of position data from the gps_module.
+* Funktionen zur Initialisierung und dem Abrufen von Daten durch das GPS-Modul. Weiterhin sind FUnktionen zum aktivieren/ deaktivieren des Moduls implementiert.
 * TB 06.10.14
-    
-TB 15.10.14 : 
-Start ohne Fix: funktioniert
-Start mit fix: funktioniert
-Was passiert wenn das GPS-Signal verloren geht? Nicht getestet
-Was passiert wenn das GPS-Modul keine SPannung hat? Nicht getestet
 */
 /**********************************************************************************
 */
 #include <Adafruit_GPS.h>
 #include "Pinning.h"
 #include "gps_module.h"
-
 
 Adafruit_GPS GPS(&GPS_SERIAL);
 
@@ -26,17 +19,13 @@ void init_GPS(){
    pinMode(PIND_ENABLE_GPS, OUTPUT);
    /*Aktiviere GPS-Modul*/
    enable_GPS();
-  // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
+  /* Setze Baudrate des verwendeten HW-Serial und die interne Baudrate des Moduls.*/
   GPS.begin(BAUD_GPS);
   GPS_SERIAL.begin(BAUD_GPS);  
-  // uncomment this line to turn on RMC (recommended minimum) and GGA (fix data) including altitude
+  /* Aktiviere RMC (Recommended Minimum) + GGA Datenstring, Der auch die Höheninformation enthält*/
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
-  // uncomment this line to turn on only the "minimum recommended" data
-  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
-  // For parsing data, we don't suggest using anything but either RMC only or RMC+GGA since
-  // the parser doesn't care about other sentences at this time  
-  // Set the update rate
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);   // 1 Hz update rate
+  /* Setze Updaterate des GPS-Modul auf 1Hz.*/
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);  
 
 }
 
@@ -45,7 +34,7 @@ Gibt die aktuelle Position als Längen- und Breitengrad, die Höhe über dem Mee
 Parameters:
 ReturnValue: gps_data.longitude;   //Längengrad
 	gps_data.latitude;         //Breitengrad
-        gps_data.altitude;         //Höhe über mittlerem Meeresspiegel
+    gps_data.altitude;         //Höhe über mittlerem Meeresspiegel
 	gps_data.fix;              // Satellitenverbindung vorhanden
 */
 struct gps_data get_position_GPS(){
@@ -60,13 +49,8 @@ struct gps_data get_position_GPS(){
    #endif
    
   
-   /*Der Aufruf von read() muss in einer Schleife erfolgen. Durch die Festlegung der Aktualisierungsrate
-   während der Initiliserung wird eine wird die Rate festgelegt, mit der neue Daten zur Verfügung stehen.
-  Der Aufruf von read() muss solange wiederholt werden, bis ein vollständiger Datensatz vorgefunden wird.
- Es werden NMEA empfangen die Statusinformationen enthalten. Beispielsweise die verwendete Firmware Version.
-Die Variable data_received wird dann zu eins wenn eine NMEA empfangen wurde, die eine gültige Position enthält.
-Ist kein fix vorhanden, kann dieser Vorgang sehr lange dauern. Mit Loopcount wird der Vorgang abgebrochen,
-wenn kein fix vorhanden ist und die vorgebene Zyklenzahl überschritten wird.*/
+/*Der Aufruf von read() muss in einer Schleife erfolgen. Durch die Festlegung der Aktualisierungsrate während der Initialisierung wird die Rate festgelegt, mit der neue Daten zur Verfügung stehen. Der Aufruf von read() muss solange wiederholt werden, bis ein vollständiger Datensatz vorgefunden wird. Es werden auch NMEA empfangen die Statusinformationen enthalten. Beispielsweise die verwendete Firmware Version. Die Variable data_received wird dann zu eins wenn eine NMEA empfangen wurde, der eine gültige Position enthält. Ist kein fix vorhanden, kann dieser Vorgang sehr lange dauern. Mit Loopcount wird der Vorgang abgebrochen,
+wenn kein fix vorhanden ist und die vorgegebene Zyklenzahl überschritten wird.*/
    while(data_received == 0 && loop_count < LCGETGPS ){ 
        loop_count++;    
        c = GPS.read();   
@@ -76,11 +60,11 @@ wenn kein fix vorhanden ist und die vorgebene Zyklenzahl überschritten wird.*/
             nmeaSentence = GPS.lastNMEA();
         
          #if DEBUG_GPS
-         DEBUG_SERIAL.println(nmeaSentence); DEBUG_SERIAL.print("\n");
+         Serial.println(nmeaSentence); Serial.print("\n");
          #endif
          /*parse() extrahiert die Informationen und macht diese im GPS Objekt verfügbar.*/
             GPS.parse(nmeaSentence);  
-            /* Es muss sichergestellt werden, dass der Empfangene NMEA Satz, ein Satz ist der Positionsdaten
+            /* Es muss sichergestellt werden, dass der Empfangene NMEA Satz auch Positionsdaten
             enthält. Weiterhin muss abgefragt werden, ob die Positionsdaten gültig sind.(fix vorhanden)*/
             if(strstr(nmeaSentence,"GPGGA") != NULL && (short)GPS.fix == 1){
             data_received=1;
@@ -103,13 +87,13 @@ wenn kein fix vorhanden ist und die vorgebene Zyklenzahl überschritten wird.*/
        }
  }
 #if DEBUG_GPS
-   DEBUG_SERIAL.print("Anzahl read() : "); DEBUG_SERIAL.print(loop_count); DEBUG_SERIAL.print("\n");
-   DEBUG_SERIAL.print("Anzahl empfangene NMAEA: "); DEBUG_SERIAL.print(debug_nmea_count); DEBUG_SERIAL.print("\n");
+   Serial.print("Anzahl read() : "); Serial.print(loop_count); Serial.print("\n");
+   Serial.print("Anzahl empfangene NMAEA: "); Serial.print(debug_nmea_count); Serial.print("\n");
 #endif
    return output;
 }
 
-/* Die Funktion aktiviert das GPS-Modul. Diese Funktion ist eine interne Funktion von init_GPS(). Soll das GPS Modul aktivert werden, somuss init_GPS() aufgerufen werden, da notwendig Einstellung ansonsten nicht geladen werden, die bei der Deaktivierung der SPannung verloren gehen.*/
+/* Die Funktion aktiviert das GPS-Modul. Diese Funktion ist eine interne Funktion von init_GPS(). Soll das GPS Modul aktiviert werden, so muss init_GPS() aufgerufen werden. Ansonsten werden notwendige Einstellungen nicht geladen, die bei der Deaktivierung der Spannung verloren gehen.*/
 void enable_GPS(){
 digitalWrite(PIND_ENABLE_GPS, HIGH); 
 }

@@ -1,9 +1,7 @@
 /*
 * xbee_module.cpp
-* FUnktionen zum senden und empfangen von Strings über Xbee. Die Xbees müssen im API-Mode laufen.
+* Funktionen zum senden und empfangen von Strings über Xbee. Die Xbees müssen im API-Mode laufen.
 * TB 30.10.14
- 
-
 */
 /**********************************************************************************
 */
@@ -16,7 +14,7 @@
 XBee xbee = XBee();
 //short handshake_flag_xbee = 1;
 
-/*Initialisert das XBee Modul. Muss vor der Verwendung einmalig aufgerufen werden.*/
+/*Initialisiert das XBee Modul. Muss vor der Verwendung einmalig aufgerufen werden.*/
 void init_xbee(){
 
 	SERIAL_XBEE_SENDEN.begin(BAUD_XBEE);//Verbindung Xbee <-> Arduino
@@ -26,7 +24,7 @@ void init_xbee(){
 	#endif
 }
 
-/*Sendet einen Datenstring über das Xbee. DIe Länge darf maximal MAX_STR_XBEE-1 betragen betragen. Nach dem senden erfolgt ein Handshake, hierber blockiert die Ausführung bis zu TIME_STATUS_RESPONES_XBEE Millisekunden.
+/*Sendet einen Datenstring über das XBee. DIe Länge darf maximal MAX_STR_XBEE-1 betragen betragen. Nach dem senden erfolgt ein Handshake, hierbei blockiert die Ausführung bis zu TIME_STATUS_RESPONES_XBEE Millisekunden.
 Parameter: char str [] : Der zu übertragene String.
 */
 void send_to_xbee(char str []){
@@ -49,7 +47,7 @@ xbee.send(tx);
         if (xbee.getResponse().getApiId() == TX_STATUS_RESPONSE) {
            xbee.getResponse().getZBTxStatusResponse(txStatus);
                 
-          /*Übertragungsstauts überprüfen*/
+          /*Übertragungsstatus überprüfen*/
            if (txStatus.getStatus() == SUCCESS) {
 		  // handshake_flag_xbee = 1;
 #if ACTIVATE_STATUS_RESPONSE_XBEE 
@@ -71,7 +69,7 @@ xbee.send(tx);
 #endif
 }
 
-/*Liest den vollständigen aktuell verfügbaren Datenstring vom Xbee und liefert diesen zurück. Die aufrufende Funktion sollte den Rückgabewert auswerten, ob ein Datenstring gelesen wurde!
+/*Liest den vollständigen aktuell verfügbaren Datenstring vom XBee und liefert diesen zurück. Die aufrufende Funktion sollte den Rückgabewert auswerten, ob ein Datenstring gelesen wurde!
 char out []: der gelesene String
 return : 1 wenn etwas gelesen wurde, ansonsten 0.
 */

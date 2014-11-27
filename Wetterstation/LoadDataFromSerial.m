@@ -1,7 +1,6 @@
 %LoadDataFromSerial.m
 % TB 11.11.2014
-% Lädt Daten von der seriellen Schnittstelle des PCs und speichert diese in
-% Matlab ab.
+% Lädt Daten von der seriellen Schnittstelle des PCs und speichert diese in Matlab ab.
 close all, clear
 
 %Zeige verfügbare serielle Verbindungen.
@@ -44,7 +43,7 @@ end
 while(stop_flag)
 %fscanf oder fgetl alle Daten abrufen
 %Plotte Daten, sobald bekannt ist in welchem Format diese gesendet werden.
-%SOlange nur den Rohstring abspeichern.
+%Solange nur den Rohstring abspeichern.
 line = fgetl(s);
 if ischar(line)
     disp(line);
