@@ -9,6 +9,8 @@
 #include <SHT1x.h>
 #include <Adafruit_GPS.h>
 
+#include <XBee.h>
+
 #include "Pinning.h"
 #include "Anemometer.h"
 #include "NTC.h"
