@@ -24,6 +24,10 @@ global stop_flag;
 stop_flag=1;
 set(f, 'KeyPressFcn', @end_on_keypress);
 
+%Zum plotten
+k=1;
+t=1:1000;
+value=zeros(1,1000);
 
 % Wähle entsprechende serielle Verbindung
 s = serial(serialPort); 
@@ -45,9 +49,17 @@ while(stop_flag)
 %Plotte Daten, sobald bekannt ist in welchem Format diese gesendet werden.
 %Solange nur den Rohstring abspeichern.
 line = fgetl(s);
-if ischar(line)
+if ischar(line) && length(line) > 1
     disp(line);
     fprintf(fid,'%s',line);
+    out = strsplit(line,';');
+    out_double = str2double(out);
+    hold all
+    value(k) = out_double(6);
+    %plot(k,out_double(6),'b'); drawnow
+    plot(t(1:k),value(1:k));
+    %line(k,out_double(6));
+    k=k+1;
 end
 
 pause(0.0001);
@@ -60,3 +72,4 @@ fclose(s);
 clear s
 
 close all
+
