@@ -26,7 +26,7 @@
 #include "RTCInternalManagement.h"
 #include "MCSleepMode.h"
 
-#define AN_DER_LEINE  1
+//#define AN_DER_LEINE  1
 #define USE_GPS       1
 
 #define BATTERY_VOLTAGE_TO_VOLTS   3.3 / 1024 * 6
