@@ -12,7 +12,7 @@
  *
  * this makes it easier to switch between USB cable and ZigBee
  **/
-#define DEBUG_SERIAL            Serial2
+#define DEBUG_SERIAL            Serial
 
 //--------------------------------------------------------------------
 //      Name                    Due-Pin     Bezeichnung

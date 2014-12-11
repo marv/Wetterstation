@@ -9,12 +9,15 @@
 #include <SHT1x.h>
 #include <Adafruit_GPS.h>
 
+#include <XBee.h>
+
 #include "Pinning.h"
 #include "Anemometer.h"
 #include "NTC.h"
 #include "HMC6352.h"
 #include "DataLogger.h"
 #include "gps_module.h"
+#include "xbee_module.h"
 
 #include "SunPositionEstimator.h"
 #include "MotorDriver.h"
@@ -22,6 +25,9 @@
 
 #include "RTCInternalManagement.h"
 #include "MCSleepMode.h"
+
+#define AN_DER_LEINE  1
+#define USE_GPS       1
 
 #define BATTERY_VOLTAGE_TO_VOLTS   3.3 / 1024 * 6
 
@@ -85,8 +91,12 @@ void setup() {
 
 
     /** GPS **/
+    DEBUG_SERIAL.println("Initializing GPS...");
     init_GPS();
 
+    /** XBee **/
+    DEBUG_SERIAL.println("Initializing XBee...");
+    init_xbee();
 
     /** BMP085 **/
     if (!bmp.begin())
@@ -96,8 +106,11 @@ void setup() {
     }
 
     /** MotorDriver & SolarPanelPositioner **/
+    DEBUG_SERIAL.println("Calibrating compass...");
     motor_driver.init();
     positioner.calibrateCompass();
+
+    DEBUG_SERIAL.println("Done!");
 }
 
 void
@@ -183,6 +196,7 @@ void loop()
     /* get the current time from the RTC */
     DateTime now = rtc.now();
 
+#ifdef USE_GPS
     /* get position from GPS */
     struct gps_data gps = get_position_GPS();
 
@@ -192,6 +206,7 @@ void loop()
     DEBUG_SERIAL.print("Lat: "); DEBUG_SERIAL.println(gps.latitude);
     DEBUG_SERIAL.print("Alt: "); DEBUG_SERIAL.println(gps.altitude);
     DEBUG_SERIAL.println();
+#endif
 
     DEBUG_SERIAL.println("Acquiring data from all sensors...");
     gather_anemometer_data(&log_entry.wind_direction, &log_entry.wind_speed);
@@ -212,10 +227,13 @@ void loop()
     logger.add_entry(log_entry);
 
 
+#ifndef AN_DER_LEINE
     /** solar panel positioning **/
     uint16_t sun_position = SunPositionEstimator::get_estimate(now, &gps);
     positioner.set_orientation(sun_position);
+#endif
 
-    enterWaitMode(15, 9600);
+    //enterWaitMode(1, 9600);
+    delay(20000);
 }
 

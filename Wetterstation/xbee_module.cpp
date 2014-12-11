@@ -8,7 +8,7 @@
 #include <Arduino.h>
 #include "Pinning.h"
 #include "xbee_module.h"
-#include "XBee.h"
+#include <XBee.h>
 
 /**/
 XBee xbee = XBee();
