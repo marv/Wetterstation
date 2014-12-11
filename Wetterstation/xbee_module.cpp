@@ -24,7 +24,7 @@ void init_xbee(){
 	#endif
 }
 
-/*Sendet einen Datenstring über das XBee. DIe Länge darf maximal MAX_STR_XBEE-1 betragen betragen. Nach dem senden erfolgt ein Handshake, hierbei blockiert die Ausführung bis zu TIME_STATUS_RESPONES_XBEE Millisekunden.
+/*Sendet einen Datenstring über das XBee. Die Länge darf maximal MAX_STR_XBEE-1 betragen. Nach dem Senden erfolgt ein Handshake, hierbei blockiert die Ausführung bis zu TIME_STATUS_RESPONES_XBEE Millisekunden.
 Parameter: char str [] : Der zu übertragene String.
 */
 void send_to_xbee(char str []){

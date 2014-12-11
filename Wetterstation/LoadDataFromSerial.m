@@ -67,7 +67,7 @@ pause(0.0001);
 end
 %Datei schlieﬂen
 fclose(fid);
-%Wichtig! Serielle Verbindung am Ende schliessen.
+%Wichtig! Serielle Verbindung am Ende schlieﬂen.
 fclose(s);
 clear s
 

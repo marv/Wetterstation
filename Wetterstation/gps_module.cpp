@@ -1,6 +1,6 @@
 /*
 * gps_module.cpp
-* Funktionen zur Initialisierung und dem Abrufen von Daten durch das GPS-Modul. Weiterhin sind FUnktionen zum aktivieren/ deaktivieren des Moduls implementiert.
+* Funktionen zur Initialisierung und dem Abrufen von Daten durch das GPS-Modul. Weiterhin sind Funktionen zum aktivieren/ deaktivieren des Moduls implementiert.
 * TB 06.10.14
 */
 /**********************************************************************************
@@ -49,8 +49,7 @@ struct gps_data get_position_GPS(){
    #endif
    
   
-/*Der Aufruf von read() muss in einer Schleife erfolgen. Durch die Festlegung der Aktualisierungsrate während der Initialisierung wird die Rate festgelegt, mit der neue Daten zur Verfügung stehen. Der Aufruf von read() muss solange wiederholt werden, bis ein vollständiger Datensatz vorgefunden wird. Es werden auch NMEA empfangen die Statusinformationen enthalten. Beispielsweise die verwendete Firmware Version. Die Variable data_received wird dann zu eins wenn eine NMEA empfangen wurde, der eine gültige Position enthält. Ist kein fix vorhanden, kann dieser Vorgang sehr lange dauern. Mit Loopcount wird der Vorgang abgebrochen,
-wenn kein fix vorhanden ist und die vorgegebene Zyklenzahl überschritten wird.*/
+/*Der Aufruf von read() muss in einer Schleife erfolgen. Durch die Festlegung der Aktualisierungsrate während der Initialisierung wird die Rate festgelegt, mit der neue Daten zur Verfügung stehen. Der Aufruf von read() muss solange wiederholt werden, bis ein vollständiger Datensatz vorgefunden wird. Es werden auch NMEA empfangen die Statusinformationen enthalten. Beispielsweise die verwendete Firmware Version. Die Variable data_received wird dann zu eins, wenn eine NMEA empfangen wurde, der eine gültige Position enthält. Ist kein fix vorhanden, kommt es zu einer Endlosschleife. Mit Loopcount wird der Vorgang abgebrochen, wenn kein fix vorhanden ist und die vorgegebene Zyklenzahl überschritten wird.*/
    while(data_received == 0 && loop_count < LCGETGPS ){ 
        loop_count++;    
        c = GPS.read();   
@@ -64,7 +63,7 @@ wenn kein fix vorhanden ist und die vorgegebene Zyklenzahl überschritten wird.*
          #endif
          /*parse() extrahiert die Informationen und macht diese im GPS Objekt verfügbar.*/
             GPS.parse(nmeaSentence);  
-            /* Es muss sichergestellt werden, dass der Empfangene NMEA Satz auch Positionsdaten
+            /* Es muss sichergestellt werden, dass der Empfangene NMEA-Satz auch Positionsdaten
             enthält. Weiterhin muss abgefragt werden, ob die Positionsdaten gültig sind.(fix vorhanden)*/
             if(strstr(nmeaSentence,"GPGGA") != NULL && (short)GPS.fix == 1){
             data_received=1;
@@ -97,7 +96,7 @@ wenn kein fix vorhanden ist und die vorgegebene Zyklenzahl überschritten wird.*
 void enable_GPS(){
 digitalWrite(PIND_ENABLE_GPS, HIGH); 
 }
-/* Deaktiviert das GPS-Modul. Nach der Deaktivierung ist das GPS-Modul Spannungsfrei, verbraucht damit keine Energie mehr. Soll das Modul wieder aktiviert werden, muss init_GPS() aufgerufen werden.*/
+/* Deaktiviert das GPS-Modul. Nach der Deaktivierung ist das GPS-Modul spannungsfrei, verbraucht damit keine Energie mehr. Soll das Modul wieder aktiviert werden, muss init_GPS() aufgerufen werden.*/
 void disable_GPS(){
 digitalWrite(PIND_ENABLE_GPS, LOW); 
 }
