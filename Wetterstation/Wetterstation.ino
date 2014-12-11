@@ -233,6 +233,7 @@ void loop()
     positioner.set_orientation(sun_position);
 #endif
 
-    enterWaitMode(15, 9600);
+    //enterWaitMode(1, 9600);
+    delay(20000);
 }
 
