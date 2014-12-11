@@ -17,6 +17,7 @@
 #include "HMC6352.h"
 #include "DataLogger.h"
 #include "gps_module.h"
+#include "xbee_module.h"
 
 #include "SunPositionEstimator.h"
 #include "MotorDriver.h"
@@ -89,6 +90,9 @@ void setup() {
     /** GPS **/
     init_GPS();
 
+    /** XBee **/
+    DEBUG_SERIAL.println("Initializing XBee...");
+    init_xbee();
 
     /** BMP085 **/
     if (!bmp.begin())
