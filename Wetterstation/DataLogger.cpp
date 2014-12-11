@@ -10,6 +10,8 @@
 #include "Pinning.h"
 #include "DataLogger.h"
 
+#include "xbee_module.h"
+
 DataLogger::DataLogger(RTC_DS1307 * rtc) :
     _rtc(rtc)
 {
@@ -69,6 +71,8 @@ DataLogger::add_entry(const DataLogEntry & entry)
                 ntc_temperatureString,
                 solar_current_string,
                 battery_voltage_string);
+
+        send_to_xbee(log_line);
 
         dataFile.print(log_line);
         dataFile.close();
